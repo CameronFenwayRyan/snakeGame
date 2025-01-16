@@ -38,4 +38,9 @@ public interface Snake {
    * Returns the snake to its initial state.
    */
   public void reset();
+
+  /**
+   * Returns the direction of the snake.
+   */
+  public Direction getDirection();
 }

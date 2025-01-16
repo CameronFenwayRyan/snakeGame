@@ -38,10 +38,15 @@ public class ImplSnakeModel implements SnakeModel {
 
   @Override
   public void progress() {
+    if (willSnakeBeOutOfBounds()) {
+      running = false;
+      running = false;
+      listener.snakeDied(score);
+    }
     // Implement the behaviors that occur every interval
     snake.updateSnakePosition();
     // Check if the game has ended
-    if (hasSnakeGoneOutOfBounds() || hasSnakeRunIntoItself()) {
+    if (hasSnakeRunIntoItself()) {
       running = false;
       running = false;
       listener.snakeDied(score);
@@ -75,11 +80,30 @@ public class ImplSnakeModel implements SnakeModel {
    *
    * @return boolean indicating if the snake is out of bounds.
    */
-  private boolean hasSnakeGoneOutOfBounds() {
+  private boolean willSnakeBeOutOfBounds() {
     GridCoord snakeHead = snake.getSnakeCoords().get(0);
-    // Check if the snake is out of bounds
-    return snakeHead.getX() > gameSize - 1 || snakeHead.getY() > gameSize - 1
-            || snakeHead.getX() < 0 || snakeHead.getY() < 0;
+    // Check if the snake will go out of bounds
+    if (snakeHead.getX() == 0) {
+      if (snake.getDirection() == Direction.LEFT) {
+        return true;
+      }
+    }
+    if (snakeHead.getY() == 0) {
+      if (snake.getDirection() == Direction.DOWN) {
+        return true;
+      }
+    }
+    if (snakeHead.getX() == gameSize - 1) {
+      if (snake.getDirection() == Direction.RIGHT) {
+        return true;
+      }
+    }
+    if (snakeHead.getY() == gameSize - 1) {
+      if (snake.getDirection() == Direction.UP) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**

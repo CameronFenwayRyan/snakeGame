@@ -70,4 +70,9 @@ public class BasicSnake implements Snake {
     snakeCoords.add(new GridCoord(0, 0));
     snakeDirection = Direction.UP;
   }
+
+  @Override
+  public Direction getDirection() {
+    return snakeDirection;
+  }
 }
