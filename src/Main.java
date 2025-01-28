@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.io.InputStreamReader;
 import py4j.GatewayServer;
 
 import Controller.ImplSnakeController;
