@@ -23,10 +23,14 @@ public class BasicSnake implements Snake {
         snakeCoords.add(0, new GridCoord(currentHead, currentTail + 1));
         break;
       case DOWN:
-        snakeCoords.add(0, new GridCoord(currentHead, currentTail - 1));
+        if (snakeCoords.get(0).getY() > 0) {
+          snakeCoords.add(0, new GridCoord(currentHead, currentTail - 1));
+        }
         break;
       case LEFT:
-        snakeCoords.add(0, new GridCoord(currentHead - 1, currentTail));
+        if (snakeCoords.get(0).getX() > 0) {
+          snakeCoords.add(0, new GridCoord(currentHead - 1, currentTail));
+        }
         break;
       case RIGHT:
         snakeCoords.add(0, new GridCoord(currentHead + 1, currentTail));

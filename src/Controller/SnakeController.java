@@ -15,4 +15,11 @@ public interface SnakeController {
    * @param apples sets the max amount of apples.
    */
   public void play();
+
+  /**
+   * Gets the model from the controller.
+   *
+   * @param model the model.
+   */
+  public SnakeModel getModel();
 }

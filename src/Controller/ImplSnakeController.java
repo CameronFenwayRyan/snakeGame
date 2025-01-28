@@ -32,7 +32,6 @@ public class ImplSnakeController implements SnakeController, ModelListener, View
 
   @Override
   public void play() {
-    System.out.println("play");
     Timer timer = new Timer();
     boolean running = true;
     model.start(gameArea, apples);
@@ -40,12 +39,12 @@ public class ImplSnakeController implements SnakeController, ModelListener, View
       view.updateView(model.getSnakeCoords(), model.getAppleCoords(), model.getScore());
       Direction nextDirection = view.getNextDirection();
       if (nextDirection != null) {
+        System.out.println("Direction: " + nextDirection);
         model.move(nextDirection);
       }
-      // Sleep for the interval
       model.progress();
       try {
-        Thread.sleep(275);
+        Thread.sleep(120);
       } catch (InterruptedException e) {
           System.err.println("Loop interrupted");
           running = false; // Exit loop on interruption
@@ -69,10 +68,8 @@ public class ImplSnakeController implements SnakeController, ModelListener, View
     model.start(gameArea, apples);
   }
 
-  /*@Override
-  public void firstMove() {
-    firstMove = true;
-    System.out.println("first move");
-    play();
-  }*/
+  @Override
+  public SnakeModel getModel() {
+    return model;
+  }
 }

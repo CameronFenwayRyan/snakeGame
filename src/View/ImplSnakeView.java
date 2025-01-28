@@ -66,7 +66,7 @@ public class ImplSnakeView extends JPanel implements SnakeView {
                         return;
                     }
             if (newDirection != null) {
-                if (inputQueue.size() >= 2) {
+                if (inputQueue.size() >= 5) {
                     inputQueue.poll(); // Remove the oldest direction
                 }
                 inputQueue.add(newDirection);

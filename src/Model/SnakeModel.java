@@ -79,4 +79,9 @@ public interface SnakeModel {
    * Resets the game to its initial state.
    */
   public void reset();
+
+  /**
+   * Returns the current direction of the snake.
+   */
+  public Direction getSnakeDirection();
 }

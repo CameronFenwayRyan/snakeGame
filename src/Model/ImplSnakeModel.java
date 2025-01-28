@@ -25,6 +25,7 @@ public class ImplSnakeModel implements SnakeModel {
   // Instance of the BasicSnake class, representing our snake
   private final Snake snake = new BasicSnake();
   private ModelListener listener;
+  private int runFrameTracker = 0;
 
   /**
    * Initializes the game with the size of the grid (2-10) and the amount of apples
@@ -38,23 +39,25 @@ public class ImplSnakeModel implements SnakeModel {
 
   @Override
   public void progress() {
+    running = true;
     if (willSnakeBeOutOfBounds()) {
       running = false;
-      running = false;
-      listener.snakeDied(score);
     }
     // Implement the behaviors that occur every interval
     snake.updateSnakePosition();
     // Check if the game has ended
     if (hasSnakeRunIntoItself()) {
       running = false;
-      running = false;
-      listener.snakeDied(score);
     }
     // Check if the snake is eating a yummy apple!
     GridCoord snakeHead = snake.getSnakeCoords().get(0);
     // Behavior for eating an apple
+    if (running == false) {
+      listener.snakeDied(score);
+    }
     tryAppleCollect(snakeHead);
+    runFrameTracker++;
+    System.out.println(running);
   }
 
   /**
@@ -216,5 +219,10 @@ public class ImplSnakeModel implements SnakeModel {
   public void setListener(ModelListener listener) {
     // Set the listener
     this.listener = listener;
+  }
+
+  @Override
+  public Direction getSnakeDirection() {
+    return snake.getDirection();
   }
 }
