@@ -39,7 +39,6 @@ public class ImplSnakeController implements SnakeController, ModelListener, View
       view.updateView(model.getSnakeCoords(), model.getAppleCoords(), model.getScore());
       Direction nextDirection = view.getNextDirection();
       if (nextDirection != null) {
-        System.out.println("Direction: " + nextDirection);
         model.move(nextDirection);
       }
       model.progress();

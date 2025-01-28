@@ -57,7 +57,6 @@ public class ImplSnakeModel implements SnakeModel {
     }
     tryAppleCollect(snakeHead);
     runFrameTracker++;
-    System.out.println(running);
   }
 
   /**

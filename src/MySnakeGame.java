@@ -2,11 +2,11 @@ import Model.SnakeModel;
 import py4j.GatewayServer;
 import Model.Direction;
 
-public class SnakeGame {
+public class MySnakeGame {
     private boolean snakeAlive; // Your game state class
     private SnakeModel snakeModel; // Your model class
 
-    public SnakeGame(SnakeModel snakeModel) {
+    public MySnakeGame(SnakeModel snakeModel) {
         this.snakeModel = snakeModel; // Initialize your model
         this.snakeAlive = true; // Initialize your game
     }
@@ -24,5 +24,9 @@ public class SnakeGame {
     // Method to reset the game
     public void reset() {
         snakeModel.reset();
+    }
+
+    public int getScore() {
+        return snakeModel.getScore();
     }
 }
