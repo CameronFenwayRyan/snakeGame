@@ -50,12 +50,14 @@ public class ImplSnakeModel implements SnakeModel {
       running = false;
     }
     // Check if the snake is eating a yummy apple!
-    GridCoord snakeHead = snake.getSnakeCoords().get(0);
+    if (snake.getSnakeCoords().size() != 0) {
+      GridCoord snakeHead = snake.getSnakeCoords().get(0);
+      tryAppleCollect(snakeHead);
+    }
     // Behavior for eating an apple
     if (running == false) {
       listener.snakeDied(score);
     }
-    tryAppleCollect(snakeHead);
     runFrameTracker++;
   }
 
