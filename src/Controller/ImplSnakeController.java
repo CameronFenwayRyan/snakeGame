@@ -63,6 +63,7 @@ public class ImplSnakeController implements SnakeController, ModelListener, View
 
   @Override
   public void playAgain() {
+    System.out.println("play again");
     model.reset();
     model.start(gameArea, apples);
   }

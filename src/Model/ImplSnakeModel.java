@@ -192,6 +192,11 @@ public class ImplSnakeModel implements SnakeModel {
     appleCoords.clear();
   }
 
+  public void playAgain() {
+    System.out.println("play again impl model");
+    listener.playAgain();
+  }
+
   public int getScore() {
     return score;
   }

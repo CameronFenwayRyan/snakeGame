@@ -84,4 +84,6 @@ public interface SnakeModel {
    * Returns the current direction of the snake.
    */
   public Direction getSnakeDirection();
+
+  public void playAgain();
 }

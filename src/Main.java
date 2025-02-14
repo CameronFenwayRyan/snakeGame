@@ -6,7 +6,7 @@ import Controller.SnakeController;
 
 public class Main {
   public static void main(String[] args) throws IOException {
-    SnakeController controller = new ImplSnakeController(20, 1);
+    SnakeController controller = new ImplSnakeController(40, 1);
     MySnakeGame game = new MySnakeGame(controller.getModel());
     GatewayServer server = new GatewayServer(game);
     server.start();
