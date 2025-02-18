@@ -18,8 +18,6 @@ public class ImplSnakeController implements SnakeController, ModelListener, View
   private final SnakeView view;
   private final int gameArea;
   private final int apples;
-  private boolean modelStart = false;
-  private boolean firstMove = false;
 
   public ImplSnakeController(int gameArea, int apples) {
     this.model = new ImplSnakeModel(gameArea, apples);
@@ -43,7 +41,7 @@ public class ImplSnakeController implements SnakeController, ModelListener, View
       }
       model.progress();
       try {
-        Thread.sleep(120);
+        Thread.sleep(10);
       } catch (InterruptedException e) {
           System.err.println("Loop interrupted");
           running = false; // Exit loop on interruption
@@ -64,6 +62,7 @@ public class ImplSnakeController implements SnakeController, ModelListener, View
   @Override
   public void playAgain() {
     System.out.println("play again");
+    view.closeGameOverDialog();
     model.reset();
     model.start(gameArea, apples);
   }

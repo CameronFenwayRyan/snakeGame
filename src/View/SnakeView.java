@@ -37,4 +37,6 @@ public interface SnakeView {
    * Called when there are multiple directions in the queue.
    */
   public Direction getNextDirection();
+
+  public void closeGameOverDialog();
 }

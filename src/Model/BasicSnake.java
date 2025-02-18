@@ -11,7 +11,7 @@ public class BasicSnake implements Snake {
 
   public BasicSnake() {
     snakeCoords = new ArrayList<>();
-    snakeCoords.add(new GridCoord(0, 0));
+    snakeCoords.add(new GridCoord(1, 1));
   }
 
   @Override
@@ -71,7 +71,7 @@ public class BasicSnake implements Snake {
   @Override
   public void reset() {
     snakeCoords.clear();
-    snakeCoords.add(new GridCoord(0, 0));
+    snakeCoords.add(new GridCoord(1, 1));
     snakeDirection = Direction.UP;
   }
 

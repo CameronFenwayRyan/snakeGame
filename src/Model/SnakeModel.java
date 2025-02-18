@@ -60,12 +60,6 @@ public interface SnakeModel {
   public List<GridCoord> getSnakeCoords();
 
   /**
-   * State that indicates that the game has been started correctly. Will return false when game
-   * is ended.
-   */
-  public boolean isActive();
-
-  /**
    * State that indicates that the main loop of the game is currently in progress.
    */
   public boolean isRunning();

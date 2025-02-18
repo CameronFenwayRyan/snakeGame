@@ -18,7 +18,6 @@ public class ImplSnakeModel implements SnakeModel {
   private int gameSize;
   private int apples;
   private int score = 0;
-  private boolean active = false;
   private boolean running = false;
   // A set containing the coordinates of all the apples currently in the game
   private final Set<GridCoord> appleCoords = new HashSet<>();
@@ -41,6 +40,7 @@ public class ImplSnakeModel implements SnakeModel {
   public void progress() {
     running = true;
     if (willSnakeBeOutOfBounds()) {
+      System.out.println("Out of bounds");
       running = false;
     }
     // Implement the behaviors that occur every interval
@@ -139,7 +139,7 @@ public class ImplSnakeModel implements SnakeModel {
     for (int i = 0; i < apples; i++) {
       setApple();
     }
-    active = true;
+    running = true;
   }
 
   @Override
@@ -185,13 +185,13 @@ public class ImplSnakeModel implements SnakeModel {
   @Override
   public void reset() {
     // Reset the game
-    active = false;
     running = false;
     score = 0;
     snake.reset();
     appleCoords.clear();
   }
 
+  @Override
   public void playAgain() {
     System.out.println("play again impl model");
     listener.playAgain();
@@ -213,11 +213,8 @@ public class ImplSnakeModel implements SnakeModel {
     return new ArrayList<>(snake.getSnakeCoords());
   }
 
-  public boolean isActive() {
-    return active;
-  }
-
   public boolean isRunning() {
+    System.out.println(running + "running");
     return running;
   }
 

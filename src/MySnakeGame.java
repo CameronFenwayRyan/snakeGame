@@ -8,6 +8,10 @@ public class MySnakeGame {
     private boolean snakeAlive; // Your game state class
     private SnakeModel snakeModel; // Your model class
 
+    public void playAgain() {
+        snakeModel.playAgain();
+    }
+
     public MySnakeGame(SnakeModel snakeModel) {
         this.snakeModel = snakeModel; // Initialize your model
         this.snakeAlive = true; // Initialize your game
@@ -45,12 +49,6 @@ public class MySnakeGame {
         }
     }
 
-    // Method to reset the game
-    public void reset() {
-        System.out.println("HEY");
-        snakeModel.playAgain();
-    }
-
     public int getScore() {
         return snakeModel.getScore();
     }
@@ -66,8 +64,16 @@ public class MySnakeGame {
     */
     public ArrayList<Integer> getState() {
         ArrayList<Integer> stateList = new ArrayList<Integer>();
-        int headX = snakeModel.getSnakeCoords().get(0).getX();
-        int headY = snakeModel.getSnakeCoords().get(0).getY();
+        int headX;
+        int headY;
+        if (snakeModel.getSnakeCoords().size() != 0) {
+            headX = snakeModel.getSnakeCoords().get(0).getX();
+            headY = snakeModel.getSnakeCoords().get(0).getY();
+        } else {
+            headX = 0;
+            headY = 0;
+        }
+        
         // Danger out of bounds
         stateList.add(headX == snakeModel.getGameSize() ? 0 : 1);
         stateList.add(headX == 0 ? 0 : 1);
@@ -94,9 +100,12 @@ public class MySnakeGame {
         stateList.add(snakeModel.getSnakeDirection() == Direction.RIGHT ? 0 : 1);
         stateList.add(snakeModel.getSnakeDirection() == Direction.LEFT ? 0 : 1);
         // Apple direction
-        int appleX = snakeModel.getAppleCoords().get(0).getX();
-        int appleY = snakeModel.getAppleCoords().get(0).getY();
-
+        int appleX = 0;
+        int appleY = 0;
+        if (!snakeModel.getAppleCoords().isEmpty()) { 
+            appleX = snakeModel.getAppleCoords().get(0).getX();
+            appleY = snakeModel.getAppleCoords().get(0).getY();
+        }
         stateList.add(appleX > headX ? 0 : 1);
         stateList.add(appleX <= headX ? 0: 1);
         stateList.add(appleY > headY ? 0 : 1);

@@ -23,6 +23,7 @@ public class ImplSnakeView extends JPanel implements SnakeView {
     private Queue<Direction> inputQueue = new LinkedList<>();
     private ViewListener listener;
     private boolean firstInputMade = false;
+    private JDialog gameOverDialog;
 
     public ImplSnakeView(SnakeModel model) {
         this.gameSize = model.getGameSize();
@@ -121,21 +122,37 @@ public class ImplSnakeView extends JPanel implements SnakeView {
 
     @Override
     public void gameOver(int score) {
-        // Create a dialog to show the game over message and score
-        int option = JOptionPane.showOptionDialog(this,
+        JOptionPane optionPane = new JOptionPane(
                 "Game Over! Your score: " + score + "\nWould you like to play again?",
-                "Game Over",
-                JOptionPane.YES_NO_OPTION,
                 JOptionPane.INFORMATION_MESSAGE,
+                JOptionPane.YES_NO_OPTION,
                 null,
                 new String[]{"Yes", "No"},
-                "Yes");
+                "Yes"
+        );
 
-        // Notify the listener based on the user's choice
-        if (option == JOptionPane.YES_OPTION) {
+        gameOverDialog = optionPane.createDialog("Game Over");
+        gameOverDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE); // Prevent default close
+        gameOverDialog.setVisible(true); 
+
+        Object selectedValue = optionPane.getValue();
+
+        // Handle user input
+        if ("Yes".equals(selectedValue)) {
             listener.playAgain();
-        } else {
+        } else if ("No".equals(selectedValue)) {
             System.exit(0);
+        } else {
+            // do nothing
+        }
+    }
+
+     // Method to close the dialog programmatically
+     @Override
+     public void closeGameOverDialog() {
+        System.out.println("close game over dialog");
+        if (gameOverDialog != null) {
+            gameOverDialog.dispose();
         }
     }
 }
