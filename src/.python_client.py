@@ -10,21 +10,21 @@ import math
 
 game = JavaGateway()
 MAX_MEMORY = 100_000
-BATCH_SIZE = 1000
+BATCH_SIZE = 50
 LR = 0.001
 
 class Agent:
 
     def __init__(self):
         self.n_games = 1
-        self.epsilon = 0 #Controls randomness
-        self.gamma = 0 # discorunt rate
+        self.epsilon = 1.00
+        self.gamma = 0.95
         self.memory = deque(maxlen=MAX_MEMORY) # popleft()
-        self.model = Linear_QNet(16, 256, 3)
+        self.model = Linear_QNet(14, 512, 3)
         self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
 
-
     def get_state(self, game):
+        java_list = list(game.getState())
         return np.array(game.getState())
 
     def remember(self, state, action, reward, next_state, gameOver):
@@ -84,20 +84,52 @@ def train():
     total_score = 0
     record = 0.0
     agent = Agent()
+    oldProx = 100000
+    newProx = 100000
+    counter = 0
+    lastScore = 0
+    steps_since_last_apple = 0
     while True:
+        counter += 1
         # get old state
         state_old = agent.get_state(game)
 
         # get move
         final_move = agent.get_action(state_old)
 
-        # perform move and get new state
-        reward = math.factorial(game.getScore())
+        # Reward calculation
+        reward = game.getScore() * 200
+
+        # Proximity to apple
+        state = list(game.getState())
+        XProxToApple = state[12]
+        YProxToApple = state[13]
+
+        max_distance = int(game.gameSize())  # Replace with actual board size if needed
+        distance_penalty = (XProxToApple + YProxToApple) / (2 * max_distance)
+
+        # Scale proximity reward (higher when closer)
+        proximity_reward = (1 - distance_penalty) * 5  # Scale factor (adjustable)
+        newProx = proximity_reward
+        if oldProx > newProx:
+            reward -= 10
+        else:
+            reward += 11
+        proximity_reward = oldProx
+
+        newScore = game.getScore()
+
+        if (newScore > lastScore):
+            steps_since_last_apple = 0
+        else:
+            steps_since_last_apple += 1
+        
+        if steps_since_last_apple >= 50:
+            reward -= 130
+
         gameOver = game.isGameOver()
-        score = game.getScore() * 10
-        score += 1
+        score = game.getScore()
         state_new = agent.get_state(game)
-        print(get_absolute_direction(game.getCurrentSnakeDirection(), final_move))
         game.executeAction(get_absolute_direction(game.getCurrentSnakeDirection(), final_move))
 
         # train short memory
@@ -107,7 +139,7 @@ def train():
         agent.remember(state_old, final_move, reward, state_new, gameOver)
 
         if not gameOver:
-            print("Game Over !")
+            print('Game', agent.n_games, 'Score', score, 'Record:', record)      
             agent.n_games += 1
             agent.train_long_memory() 
 
@@ -115,9 +147,7 @@ def train():
                 record = score
                 agent.model.save()
             game.playAgain()
-
-        print('Game', agent.n_games, 'Score', score, 'Record:', record)
-
+    
         plot_scores.append(score)
         total_score += score
         mean_score = total_score / agent.n_games

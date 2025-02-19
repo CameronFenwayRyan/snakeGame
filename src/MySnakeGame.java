@@ -8,6 +8,10 @@ public class MySnakeGame {
     private boolean snakeAlive; // Your game state class
     private SnakeModel snakeModel; // Your model class
 
+    public int gameSize() {
+        return snakeModel.getGameSize();
+    }
+
     public void playAgain() {
         snakeModel.playAgain();
     }
@@ -81,15 +85,15 @@ public class MySnakeGame {
         stateList.add(headY == 0 ? 0 : 1);
         // Danger run into self
         if (headX != snakeModel.getGameSize() && headX != 0) {
-            stateList.add(snakeModel.getSnakeCoords().contains(new GridCoord(headX + 1, headY)) ? 0 : 1);
-            stateList.add(snakeModel.getSnakeCoords().contains(new GridCoord(headX - 1, headY)) ? 0 : 1);
+            stateList.add(headX - snakeModel.getGameSize());
+            stateList.add(headX - 0);
         } else {
             stateList.add(0);
             stateList.add(0);
         }
         if (headY != snakeModel.getGameSize() && headY != 0) {
-            stateList.add(snakeModel.getSnakeCoords().contains(new GridCoord(headX, headY + 1)) ? 0 : 1);
-            stateList.add(snakeModel.getSnakeCoords().contains(new GridCoord(headX, headY - 1)) ? 0 : 1);
+            stateList.add(headY - snakeModel.getGameSize());
+            stateList.add(headY - 0);
         } else {
             stateList.add(0);
             stateList.add(0);
@@ -106,10 +110,8 @@ public class MySnakeGame {
             appleX = snakeModel.getAppleCoords().get(0).getX();
             appleY = snakeModel.getAppleCoords().get(0).getY();
         }
-        stateList.add(appleX > headX ? 0 : 1);
-        stateList.add(appleX <= headX ? 0: 1);
-        stateList.add(appleY > headY ? 0 : 1);
-        stateList.add(appleY <= headY ? 0 : 1);
+        stateList.add(appleX - headX);
+        stateList.add(appleY - headY);
 
         return stateList;
     }
