@@ -92,7 +92,7 @@ def train():
     oldScore = 0
     while True:
         try:
-            print(counter)
+            reward = 0
             counter += 1
             # get old state
             state_old = agent.get_state(game)
@@ -103,9 +103,13 @@ def train():
             # Reward calculation
             reward = game.getScore()
 
-            if counter > 2000:
-                print("HEY")
-                newScore = game.getScore()
+            newScore = game.getScore()
+
+            if newScore > oldScore:
+                reward = game.getScore()
+
+            if counter > 50:
+                
                 if newScore == oldScore:
                     print("punished")
                     reward = -10
@@ -128,7 +132,6 @@ def train():
                 print('Model saved')
 
             if not gameOver:
-                reward -= 10
                 print('Game', agent.n_games, 'Score', score, 'Record:', record)      
                 
                 agent.train_long_memory() 
