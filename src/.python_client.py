@@ -12,7 +12,7 @@ import os
 
 game = JavaGateway()
 MAX_MEMORY = 100_000
-BATCH_SIZE = 50
+BATCH_SIZE = 500
 LR = 0.001
 
 class Agent:
@@ -47,7 +47,7 @@ class Agent:
 
     def get_action(self, state):
          # random moves: tradeoff exploration / exploitation
-        self.epsilon = 80 - self.n_games
+        self.epsilon = max(0.01, 1.0 * math.exp(-0.01 * self.n_games))
         final_move = [0,0,0]
         if random.randint(0, 200) < self.epsilon:
             move = random.randint(0, 2)
@@ -80,19 +80,19 @@ def get_absolute_direction(current_direction, relative_move):
     
     raise ValueError("Invalid relative move: " + str(relative_move))
 
+
 def train():
     plot_scores = []
     plot_mean_scores = []
     total_score = 0
     record = 0.0
     agent = Agent()
-    oldProx = 100000
-    newProx = 100000
     counter = 0
-    lastScore = 0
-    steps_since_last_apple = 0
+    newScore = 0
+    oldScore = 0
     while True:
         try:
+            print(counter)
             counter += 1
             # get old state
             state_old = agent.get_state(game)
@@ -101,34 +101,16 @@ def train():
             final_move = agent.get_action(state_old)
 
             # Reward calculation
-            reward = game.getScore() * 200
+            reward = game.getScore()
 
-            # Proximity to apple
-            state = list(game.getState())
-            XProxToApple = state[12]
-            YProxToApple = state[13]
-
-            max_distance = int(game.gameSize())  # Replace with actual board size if needed
-            distance_penalty = (XProxToApple + YProxToApple) / (2 * max_distance)
-
-            # Scale proximity reward (higher when closer)
-            proximity_reward = (1 - distance_penalty) * 5  # Scale factor (adjustable)
-            newProx = proximity_reward
-            if oldProx > newProx:
-                reward -= 10
-            else:
-                reward += 11
-            proximity_reward = oldProx
-
-            newScore = game.getScore()
-
-            if (newScore > lastScore):
-                steps_since_last_apple = 0
-            else:
-                steps_since_last_apple += 1
-            
-            if steps_since_last_apple >= 50:
-                reward -= 130
+            if counter > 2000:
+                print("HEY")
+                newScore = game.getScore()
+                if newScore == oldScore:
+                    print("punished")
+                    reward = -10
+                oldScore = newScore
+                counter = 0
 
             gameOver = game.isGameOver()
             score = game.getScore()
@@ -141,32 +123,36 @@ def train():
             # remember
             agent.remember(state_old, final_move, reward, state_new, gameOver)
 
+            if keyboard.is_pressed('s'):
+                agent.model.save()
+                print('Model saved')
+
             if not gameOver:
+                reward -= 10
                 print('Game', agent.n_games, 'Score', score, 'Record:', record)      
-                agent.n_games += 1
+                
                 agent.train_long_memory() 
 
-                if score >= record:
+                if score > record:
                     record = score
                     agent.model.save()
                 
-                steps_since_last_apple = 0
-                lastScore = 0
-                oldProx = 100000
-                newProx = 100000
-        
                 plot_scores.append(score)
                 total_score += score
                 mean_score = total_score / agent.n_games
                 plot_mean_scores.append(mean_score)
                 plot(plot_scores, plot_mean_scores, agent.n_games)    
 
+                agent.n_games += 1
+                newScore = 0
+                oldScore = 0
+                counter = 0
                 game.playAgain()
                 time.sleep(0.01)
                 if not gameOver:
                     game.playAgain()
 
-            time.sleep(0.0001)
+            time.sleep(0.1)
     
         except Exception as e:
             game.playAgian()
