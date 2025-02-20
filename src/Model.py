@@ -4,6 +4,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 import os
 import numpy
+import time
 
 class Linear_QNet(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
@@ -16,13 +17,17 @@ class Linear_QNet(nn.Module):
         x = self.linear2(x)
         return x
 
-    def save(self, file_name='model.pth'):
+    def save(self, file_name_prefix='model.pth'):
         model_folder_path = './model'
         if not os.path.exists(model_folder_path):
             os.makedirs(model_folder_path)
 
-        file_name = os.path.join(model_folder_path, file_name)
+        # Create a unique file name by appending the current timestamp
+        timestamp = time.strftime("%Y%m%d-%H%M%S")  # Format: YYYYMMDD-HHMMSS
+        file_name = os.path.join(model_folder_path, f'{file_name_prefix}_{timestamp}.pth')
+        
         torch.save(self.state_dict(), file_name)
+        print(f"Model saved to {file_name}")
 
 
 class QTrainer:

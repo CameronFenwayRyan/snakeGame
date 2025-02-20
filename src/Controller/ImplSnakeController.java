@@ -41,7 +41,7 @@ public class ImplSnakeController implements SnakeController, ModelListener, View
       }
       model.progress();
       try {
-        Thread.sleep(10);
+        Thread.sleep(100);
       } catch (InterruptedException e) {
           System.err.println("Loop interrupted");
           running = false; // Exit loop on interruption
